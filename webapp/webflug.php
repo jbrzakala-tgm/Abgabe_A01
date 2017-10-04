@@ -14,6 +14,7 @@
     $servername ="localhost";
     $username = "root";
     $password = "Brztgm1234";
+    $brnl = "<br>\n";
 
     try{
       $conn = new PDO("mysql:host=$servername;dbname=flightdata",$username, $password);
@@ -24,12 +25,48 @@
       echo "Connection failed: " . $e->getMessage();
     }
 
+
+
+    if (isset($_POST['loeschen'])) {
+  		if (!isset($_POST['rad'])) {
+  			$meldung .= 'Bitte markieren Sie den zu l&ouml;schenden Datensatz!' . $brnl;
+  		} else {
+
+  			// Markierten Datensatz l�schen
+  			$sql = 'DELETE FROM passengers WHERE id =' . $_POST['rad'];
+  			// echo $sql;
+  		 $conn->query($sql);
+
+  		}
+  	}
+
   ?>
 
 </head>
 <body>
 ​<form  method="post" action="<?=$_SERVER['PHP_SELF']?>" >
 <div class="container">
+
+
+ <h2>Login</h2>
+
+ <div class="form-group">
+   <label for="input" class="control-label">Login</label>
+   <input type="input" class="form-control" id="lo_id" name="login" placeholder="root">
+ </div>
+
+ <div class="form-group">
+   <label for="search" class="control-label">Password</label>
+   <input type="password" class="form-control" id="pass_id" name="pass" placeholder="1234">
+ </div>
+
+ <div class="form-group">
+   <button type="login" class="btn btn-primary" name="login">Sign in</button>
+   <input type="hidden"  name="button" />
+ </div>
+
+
+  <br>
   <h2>Flugticket-Manager</h2>
   <br>
 
@@ -57,11 +94,12 @@ if(isset($_POST['flug']))
     $flightnr = $_POST['flugnr'];
 
     $sql = "SELECT * FROM flights WHERE flightnr = $flightnr";
+    $sql1 = "SELECT * FROM passengers WHERE flightnr = $flightnr ORDER BY 6,7";
 
     foreach($conn->query($sql) as $row) {
 
       echo "
-      <table border='2' cellpadding='5'><tr>
+      <table border='2' cellpadding='5' align='center'><tr>
       <th align='left'> Abflugsflughafen </th><th align='left'>Abflugszeit</th><th align='left'>Airline</th><th align='left'>Ankunftsflughafen</th><th align='left'>Ankunftszeit</th><th align='left'>Flugzeugart</th><tr>
 
       ";
@@ -76,14 +114,49 @@ if(isset($_POST['flug']))
         <td>". $row['planetype'] ."</td>
       </tr>
     </table>
+    <hr>
         ";
+
+    foreach($conn->query($sql1) as $row) {
+
+     echo "
+     <table border='2' cellpadding='5' align='center'><tr>
+     <th align='left'>Auswählen</th><th align='left'> Vorname </th><th align='left'>Nachname</th><th align='left'>Airline</th><th align='left'>Flugnummer</th><th align='left'>Reihe</th><th align='left'>Platz</th><tr>
+
+     ";
+
+     echo "
+     <form  method='post' action='<?=$_SERVER['PHP_SELF']?>' >
+     <tr>
+       <td><input type='radio' name='rad' value='" . $row['id'] . "' > </td>
+       <td>". $row['firstname'] ."</td>
+       <td>". $row['lastname'] ."</td>
+       <td>". $row['airline'] ."</td>
+       <td>". $row['flightnr'] ."</td>
+       <td>". $row['rownr'] ."</td>
+       <td>". $row['seatposition'] ."</td>
+     </tr>
+   </table>
+   <p align='right'>
+   <input type='submit' name='loeschen' value='loeschen' />
+   <input type='hidden' value='1' name='flug' />
+   </form>
+   </p>
+   <hr>
+
+
+
+     ";
+
+
+
      }
 
-
+   }
 }
 
  ?>
-​
+
 </body>
 </html>
 ​
