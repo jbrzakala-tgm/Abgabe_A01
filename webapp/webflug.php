@@ -124,9 +124,11 @@ if(isset($_POST['flug']))
      <th align='left'>Auswählen</th><th align='left'> Vorname </th><th align='left'>Nachname</th><th align='left'>Airline</th><th align='left'>Flugnummer</th><th align='left'>Reihe</th><th align='left'>Platz</th><tr>
 
      ";
-
+?>
+    <form  method='post' action='<?=$_SERVER['PHP_SELF']?>' >
+<?php
      echo "
-     <form  method='post' action='<?=$_SERVER['PHP_SELF']?>' >
+
      <tr>
        <td><input type='radio' name='rad' value='" . $row['id'] . "' > </td>
        <td>". $row['firstname'] ."</td>
@@ -138,8 +140,7 @@ if(isset($_POST['flug']))
      </tr>
    </table>
    <p align='right'>
-   <input type='submit' name='loeschen' value='loeschen' />
-   <input type='hidden' value='1' name='flug' />
+   <input type='submit' name='loeschen' value='löschen' />
    </form>
    </p>
    <hr>
