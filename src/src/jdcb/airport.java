@@ -1,4 +1,4 @@
-package jdcb;
+package src.jdcb;
 
 public class airport {
 
