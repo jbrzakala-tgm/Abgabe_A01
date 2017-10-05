@@ -49,16 +49,19 @@ public class gui1 {
 	
 	public static void main(String[] args) {
 		try {
-		Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightdata", "root", "Miguel");
+		Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightdata", "root", "Brztgm1234");
+		
 		Statement myStat = myConn.createStatement();
+		
 		ResultSet myRs = myStat.executeQuery("select countries.name,airports.name from airports,countries WHERE airports.country = countries.code ORDER BY 1;");
 		
 		
 		ArrayList<String> airports = new ArrayList<String>();
+		
 		while(myRs.next()) {
 			String country = myRs.getString("countries.name");
 			String airport = myRs.getString("airports.name");
-			airports.add(airport+","+country);
+			airports.add(airport +", "+ country);
 		}
 		
 		
@@ -119,9 +122,9 @@ public class gui1 {
 			      
 					
 			        try {
-			    		Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightdata", "root", "Miguel");
+			    		Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightdata", "root", "Brztgm1234");
 			    		Statement myStat = myConn.createStatement();
-			    		ResultSet myRs = myStat.executeQuery("select * from flights where departure_airport like '"+ abflug +"'AND  destination_airport like '" + ankunft + "';" );
+			    		ResultSet myRs = myStat.executeQuery("SELECT * FROM flights WHERE departure_airport like '"+ abflug +"'AND  destination_airport like '" + ankunft + "';" );
 			    		
 			    		while(myRs.next()){
 			    			flughafen.add(new airport(myRs.getString("country"), myRs.getString("city"), myRs.getString("airportcode"), myRs.getString("name")));
