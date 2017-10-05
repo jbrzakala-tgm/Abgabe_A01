@@ -34,8 +34,7 @@ import java.awt.event.ActionEvent;
 public class gui1 {
 
 	static ArrayList<airport> flughafen= new ArrayList<airport>();
-    static ArrayList<String> words;
-    static HashSet<String> word = new HashSet<String>();
+    //static HashSet<String> word = new HashSet<String>();
 	
 	private JFrame frame;
 	private JTextField textField;
@@ -52,18 +51,17 @@ public class gui1 {
 		try {
 		Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightdata", "root", "Miguel");
 		Statement myStat = myConn.createStatement();
-		ResultSet myRs = myStat.executeQuery("select * from airports");
+		ResultSet myRs = myStat.executeQuery("select countries.name,airports.name from airports,countries WHERE airports.country = countries.code ORDER BY 1;");
 		
-		while(myRs.next()){
-			flughafen.add(new airport(myRs.getString("country"), myRs.getString("city"), myRs.getString("airportcode"), myRs.getString("name")));
-		}
-		for(int i = 0; i < flughafen.size();i++) {
-			word.add(flughafen.get(i).getAirportcode());
-			word.add(flughafen.get(i).getCity());
-			word.add(flughafen.get(i).getName());
+		
+		ArrayList<String> airports = new ArrayList<String>();
+		while(myRs.next()) {
+			String country = myRs.getString("countries.name");
+			String airport = myRs.getString("airports.name");
+			airports.add(airport+","+country);
 		}
 		
-		words = new ArrayList<String>(word);
+		
 		}catch(Exception e) {
 			System.out.println(e.toString());
 		}
@@ -71,8 +69,8 @@ public class gui1 {
 			public void run() {
 				try {
 
-					gui1 window = new gui1();
-					window.frame.setVisible(true);
+					gui1 fenster = new gui1();
+					fenster.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -89,7 +87,7 @@ public class gui1 {
 
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1013, 1081);
+		frame.setBounds(50, 50, 1000, 1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		textField = new JTextField();
@@ -128,13 +126,7 @@ public class gui1 {
 			    		while(myRs.next()){
 			    			flughafen.add(new airport(myRs.getString("country"), myRs.getString("city"), myRs.getString("airportcode"), myRs.getString("name")));
 			    		}
-			    		for(int i = 0; i < flughafen.size();i++) {
-			    			word.add(flughafen.get(i).getAirportcode());
-			    			word.add(flughafen.get(i).getCity());
-			    			word.add(flughafen.get(i).getName());
-			    		}
 			    		
-			    		words = new ArrayList<String>(word);
 			    		}catch(Exception e) {
 			    			System.out.println(e.toString());
 			    		}
@@ -187,8 +179,8 @@ public class gui1 {
 		textField_7.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField_7.setColumns(10);
 		
-		JButton btnInDbSpeichern = new JButton("In DB speichern");
-		btnInDbSpeichern.setFont(new Font("Tahoma", Font.PLAIN, 28));
+		JButton dbspeichern = new JButton("In DB speichern");
+		dbspeichern.setFont(new Font("Tahoma", Font.PLAIN, 28));
 		
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -236,7 +228,7 @@ public class gui1 {
 					.addGap(453))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(185)
-					.addComponent(btnInDbSpeichern, GroupLayout.PREFERRED_SIZE, 270, GroupLayout.PREFERRED_SIZE)
+					.addComponent(dbspeichern, GroupLayout.PREFERRED_SIZE, 270, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(564, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
@@ -285,11 +277,13 @@ public class gui1 {
 						.addComponent(lblSitzplatz, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
 						.addComponent(textField_7, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
 					.addGap(97)
-					.addComponent(btnInDbSpeichern, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
+					.addComponent(dbspeichern, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
 					.addGap(204))
 		);
 		
 
 		frame.getContentPane().setLayout(groupLayout);
 	}
+	
+	
 }
