@@ -34,7 +34,7 @@ import java.awt.event.ActionEvent;
 public class gui1 {
 
 	static ArrayList<airport> flughafen= new ArrayList<airport>();
-    //static HashSet<String> word = new HashSet<String>();
+ 
 	
 	private JFrame frame;
 	private JTextField textField;
